@@ -288,8 +288,6 @@ symbol_table_file = base_dir + 'symbol_table.txt'
 
 #---------updated: get token in the parser----------
 
-scanner = Scanner()
-
 with open(input_file, 'r') as f:
     while True:
         character = f.read(1)
