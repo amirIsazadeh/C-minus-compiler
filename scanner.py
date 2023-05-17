@@ -175,6 +175,7 @@ def lookahead_state(state: int, char: str):
 
 class Scanner:
     def __init__(self):
+        self.token_index = 0
         self.line_number = 1
         self.current_state = 0
         self.string = ''
@@ -249,6 +250,13 @@ class Scanner:
             self.errors.append(
                 (self.line_number - self.string.count('\n'), {'string': err, 'message': 'Unclosed comment'}))
 
+    def get_next_token(self):
+        if self.token_index < len(self.tokens):
+            token = self.tokens[self.token_index]
+            self.token_index += 1
+            return token
+        else:
+            return None
 
 scanner = Scanner()
 
@@ -264,18 +272,40 @@ lexical_error_file = base_dir + 'lexical_errors.txt'
 tokens_file = base_dir + 'tokens.txt'
 symbol_table_file = base_dir + 'symbol_table.txt'
 
+#
+# with open(input_file, 'r') as f:
+#     while True:
+#         character = f.read(1)
+#
+#         if not character:
+#             break
+#
+#         scanner.next(character)
+#
+# scanner.next('\n')
+# scanner.finish()
+
+
+#---------updated: get token in the parser----------
+
+scanner = Scanner()
 
 with open(input_file, 'r') as f:
     while True:
         character = f.read(1)
-
         if not character:
             break
-
         scanner.next(character)
-
 scanner.next('\n')
 scanner.finish()
+
+while True:
+    token = scanner.get_next_token()
+    if token is None:
+        break
+
+#---------updated: get token in the parser----------
+
 
 with open(lexical_error_file, 'w') as f:
     if scanner.errors:
